@@ -1,21 +1,25 @@
 # Testing
 
-We use [pytest](https://docs.pytest.org/en/latest/) for testing. Please try to ensure that all functions
-are tested, including both unit and integration tests.
+* We use [pytest](https://docs.pytest.org/en/latest/) for testing. Please try to ensure that all functions
+are tested, including both unit and integration tests. We aim for 100% coverage where possible.
+* We use [codecov](https://about.codecov.io/) as the coverage reporting tool. This is free for open-source
+  projects and integrates with GitHub actions.
 
-## Long running tests
-Some tests may take a long time, e.g. those requiring `TensorFlow` if you don't have a GPU. These tests should be
-marked with `@pytest.mark.slow`, e.g.:
-
-```python
-import pytest
-@pytest.mark.slow
-def test_something_slow() -> None:
-    slow_result = run_slow_processes()
-    assert slow_result == expected_slow_thing, "some useful error message"
+## Local testing with pytest and coverage
+### pytest
+We recommend to start unit testing locally through your project's terminal with the activated environment. 
+You can also use VS Code or PyCharm for unit testing.
+To run pytest from the repository directory
+```bash
+pytest
 ```
 
-During development, these "slow" tests can be skipped by running `pytest -m "not slow"`.
+Sometimes, you may need to run a single test or specific modules. You can do so using the following examples.
+Make sure to check the paths, filenames, and test names.
+```
+pytest tests/atlasapi/test_cli.py
+pytest tests/atlasapi/test_cli.py::test_config_cli
+```
 
 ## Continuous integration
 A GitHub actions workflow (`.github/workflows/test_and_deploy.yml`) has been set up to run (on each commit/PR):
@@ -23,6 +27,8 @@ A GitHub actions workflow (`.github/workflows/test_and_deploy.yml`) has been set
 * Testing (only if linting checks pass)
 * Release to PyPI (only if a git tag is present and if tests pass). Requires `TWINE_API_KEY` 
 from PyPI to be set in repository secrets.
+* Sometimes additional, cross-repository, tests are run such as testing `brainmapper` with a development version of
+`cellfinder`
 
 Many of these workflows use actions from 
 [neuroinformatics-unit/actions](https://github.com/neuroinformatics-unit/actions). Feel free to raise a PR to that 
